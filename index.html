@@ -118,7 +118,7 @@ strong{color:var(--text); font-weight:600;}
 .glow-card{position:relative; overflow:hidden;}
 .glow-card::before{
   content:''; position:absolute; inset:0; z-index:0; opacity:0; transition:opacity .3s ease;
-  background:radial-gradient(420px circle at var(--mx, 50%) var(--my, 50%), rgba(91,141,239,.14), transparent 70%);
+  background:radial-gradient(420px circle at var(--mx,50%) var(--my,50%), rgba(91,141,239,.14), transparent 70%);
 }
 .glow-card:hover::before{opacity:1;}
 .glow-card > *{position:relative; z-index:1;}
@@ -163,7 +163,7 @@ header{
 .btn-block{width:100%; justify-content:center;}
 
 .navmobile-toggle{
-  display:none; width:38px; height:38px; border-radius:999px; border:1px solid var(--border);
+  display:none; width:38px; height:38px; border-radius:9px; border:1px solid var(--border);
   background:var(--surface); align-items:center; justify-content:center; flex-direction:column; gap:4px;
 }
 .navmobile-toggle span{width:16px; height:1.5px; background:var(--text-dim); display:block; transition:.25s ease;}
@@ -223,17 +223,14 @@ header{
 .live-dot{width:6px; height:6px; border-radius:50%; background:var(--red); animation:pulse 2s ease-in-out infinite;}
 @keyframes pulse{0%,100%{opacity:1;}50%{opacity:.3;}}
 
-.rfid-badge-control{display:flex; align-items:center; gap:12px; font-family:var(--mono); font-size:13px;}
-.rfid-select{background:var(--bg-soft); color:var(--text); border:1px solid var(--border); padding:6px 12px; border-radius:8px; font-family:var(--mono); font-size:12px; outline:none;}
-.rfid-select:focus{border-color:var(--green);}
-.rfid-select:disabled{opacity:0.5; cursor:not-allowed;}
-.badge-active{color:var(--green) !important;}
-
-.session-banner{
-  font-family:var(--mono); font-size:12px; color:var(--text-dim); background:var(--bg-soft);
-  padding:10px 16px; border-radius:10px; margin-bottom:22px; border:1px solid var(--border-soft);
-  display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:8px;
-}
+.toggle-row{display:flex; align-items:center; gap:13px; font-family:var(--mono); font-size:13px;}
+.toggle-row .state{color:var(--text-faint); transition:color .2s ease;}
+.toggle-row .state.active{color:var(--text);}
+.toggle-row .state.active.eco{color:var(--green);}
+.switch{width:58px; height:31px; border-radius:999px; background:#141d34; border:1px solid var(--border); position:relative;}
+.switch .knob{width:23px; height:23px; border-radius:50%; background:var(--text-dim); position:absolute; top:3px; left:3px; transition:transform .35s var(--ease), background .35s ease;}
+.switch.on{background:var(--green-soft); border-color:var(--green);}
+.switch.on .knob{transform:translateX(27px); background:var(--green);}
 
 .demo-stats{display:grid; grid-template-columns:repeat(3, 1fr); gap:14px; margin-bottom:28px;}
 .stat-card{background:var(--bg-soft); border:1px solid var(--border-soft); border-radius:13px; padding:19px 17px; text-align:left;}
@@ -413,6 +410,65 @@ footer{border-top:1px solid var(--border-soft); padding:44px 0;}
 .foot-links a:hover{color:var(--text);}
 .foot-sources{margin-top:22px; padding-top:22px; border-top:1px solid var(--border-soft); font-family:var(--mono); font-size:11.5px; color:var(--text-faint); line-height:1.9;}
 
+/* ============================= RFID SIMULATOR ============================= */
+.rfid-panel{background:linear-gradient(180deg, var(--surface), var(--surface-2)); border:1px solid var(--border); border-radius:22px; padding:32px; margin-top:44px;}
+.rfid-top{display:flex; align-items:center; justify-content:space-between; gap:16px; flex-wrap:wrap; margin-bottom:28px;}
+.rfid-body{display:grid; grid-template-columns:200px 1fr; gap:34px; align-items:start;}
+@media (max-width:720px){.rfid-body{grid-template-columns:1fr;}}
+
+.tag-visual{position:relative; display:flex; align-items:center; justify-content:center; height:140px;}
+.tag-card{
+  width:150px; height:94px; border-radius:12px; background:linear-gradient(135deg, var(--surface-2), var(--bg-soft));
+  border:1px solid var(--border-strong); display:flex; flex-direction:column; justify-content:space-between; padding:12px 14px;
+  position:relative; z-index:2; transition:transform .25s var(--ease), border-color .25s ease;
+}
+.tag-card.pulse{border-color:var(--green); transform:scale(1.04);}
+.tag-chip{width:26px; height:19px; border-radius:4px; background:linear-gradient(135deg, var(--amber), #c98420); display:block;}
+.tag-id{font-family:var(--mono); font-size:10.5px; color:var(--text-faint); letter-spacing:.02em;}
+.wave-ring{position:absolute; width:150px; height:94px; border-radius:12px; border:1.5px solid var(--green); opacity:0; pointer-events:none;}
+.wave-ring.animate{animation:waveout .7s var(--ease);}
+@keyframes waveout{
+  0%{opacity:.9; transform:scale(1);}
+  100%{opacity:0; transform:scale(1.55);}
+}
+
+.asset-list-wrap{min-width:0;}
+.asset-list-head{display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:8px; font-family:var(--mono); font-size:11.5px; color:var(--text-faint); text-transform:uppercase; letter-spacing:.06em; padding-bottom:14px; border-bottom:1px solid var(--border-soft); margin-bottom:4px;}
+#chipsAvoided{color:var(--green); text-transform:none; letter-spacing:0;}
+.asset-list{display:flex; flex-direction:column;}
+.asset-empty{padding:22px 4px; color:var(--text-faint); font-size:13.5px;}
+.asset-item{display:flex; align-items:center; gap:14px; padding:14px 4px; border-top:1px solid var(--border-soft); flex-wrap:wrap;}
+.asset-item:first-of-type{border-top:none;}
+.asset-dot{width:7px; height:7px; border-radius:50%; background:var(--green); box-shadow:0 0 0 3px var(--green-soft); flex-shrink:0; animation:pulse 2s ease-in-out infinite;}
+.asset-main{flex:1; min-width:160px;}
+.asset-main .gpu{font-family:var(--mono); font-weight:700; font-size:13.5px; color:var(--text);}
+.asset-main .tag{font-family:var(--mono); font-size:11.5px; color:var(--text-faint); margin-top:2px;}
+.asset-meta{display:flex; gap:16px; font-family:var(--mono); font-size:12px; color:var(--text-dim);}
+.asset-meta b{color:var(--text);}
+.asset-checkout{font-family:var(--mono); font-size:11.5px; color:var(--text-faint); border:1px solid var(--border); border-radius:999px; padding:6px 12px; transition:color .15s ease, border-color .15s ease;}
+.asset-checkout:hover{color:var(--red); border-color:var(--red);}
+
+/* ============================= LIVE STATE PANEL ============================= */
+.livestate-panel{background:linear-gradient(180deg, var(--surface), var(--surface-2)); border:1px solid var(--border); border-radius:22px; padding:32px; margin-top:44px;}
+.livestate-top{display:flex; align-items:center; justify-content:space-between; gap:16px; flex-wrap:wrap; margin-bottom:26px;}
+.livestate-top b{color:var(--text);}
+.livestate-select-wrap{display:flex; align-items:center; gap:12px; flex-wrap:wrap;}
+.asset-select{
+  font-family:var(--mono); font-size:12.5px; color:var(--text); background:var(--bg-soft);
+  border:1px solid var(--border); border-radius:999px; padding:9px 14px;
+}
+.livestate-grid{display:grid; grid-template-columns:repeat(4, 1fr); gap:14px;}
+@media (max-width:860px){.livestate-grid{grid-template-columns:repeat(2, 1fr);}}
+.ls-empty{grid-column:1/-1; padding:30px 4px; color:var(--text-faint); font-size:14px; text-align:center;}
+.livestate-foot{
+  display:flex; align-items:center; justify-content:space-between; flex-wrap:wrap; gap:10px;
+  font-family:var(--mono); font-size:12.5px; color:var(--text-dim);
+  border-top:1px solid var(--border-soft); padding-top:20px; margin-top:24px;
+}
+.verified-badge{color:var(--green); font-weight:600;}
+.verified-badge b{color:var(--green);}
+.refresh-btn-spin{opacity:.6; pointer-events:none;}
+
 </style>
 </head>
 <body>
@@ -426,12 +482,13 @@ footer{border-top:1px solid var(--border-soft); padding:44px 0;}
     <nav class="navlinks">
       <a href="#objection">Why not DIY</a>
       <a href="#how">How it works</a>
+      <a href="#rfid">Live inventory</a>
       <a href="#who">Who it's for</a>
       <a href="#pricing">Pricing</a>
     </nav>
     <div class="navcta">
-      <a href="#pricing" class="btn btn-ghost">Login</a>
-      <a href="#pricing" class="btn btn-primary">Sign up</a>
+      <a href="login.html" class="btn btn-ghost">Login</a>
+      <a href="signup.html" class="btn btn-primary">Sign up</a>
     </div>
     <button class="navmobile-toggle" id="mobileToggle" aria-label="Menu" aria-expanded="false"><span></span><span></span><span></span></button>
   </div>
@@ -439,10 +496,9 @@ footer{border-top:1px solid var(--border-soft); padding:44px 0;}
     <div class="wrap">
       <a href="#objection">Why not DIY</a>
       <a href="#how">How it works</a>
+      <a href="#rfid">Live inventory</a>
       <a href="#who">Who it's for</a>
       <a href="#pricing">Pricing</a>
-      <a href="#pricing">Login</a>
-      <a href="#pricing">Sign up</a>
     </div>
   </div>
 </header>
@@ -462,27 +518,20 @@ footer{border-top:1px solid var(--border-soft); padding:44px 0;}
     <div class="demo bracket">
       <div class="demo-top">
         <span class="demo-label"><span class="live-dot"></span>LIVE DEMO · Llama-3-8B on a rented cloud GPU</span>
-        <div class="rfid-badge-control">
-          <span style="color:var(--text-faint);">Simulate Scan:</span>
-          <select id="rfidTagSelect" class="rfid-select">
-            <option value="TAG-A1001">TAG-A1001 (Angel Kansal - ML Team)</option>
-            <option value="TAG-H2002">TAG-H2002 (Harshmeet Kaur - Design)</option>
-          </select>
-          <button id="rfidActionBtn" class="btn btn-primary" style="padding:6px 14px; font-size:12px;">Badge In</button>
+        <div class="toggle-row">
+          <span class="state" id="lblOff">FP16 · Standard</span>
+          <button class="switch" id="ecoSwitch" role="switch" aria-checked="false" aria-label="Toggle eco mode"><span class="knob"></span></button>
+          <span class="state eco" id="lblOn">INT4 · Eco Mode</span>
         </div>
       </div>
-      <div class="session-banner" id="sessionBanner">
-        <span>Active User: <strong id="activeUser" style="color:var(--text-faint);">None (Standby)</strong></span>
-        <span>Allocation: <strong id="activeTeam" style="color:var(--text-faint);">Unassigned</strong></span>
-      </div>
       <div class="demo-stats">
-        <div class="stat-card"><div class="k">VRAM used</div><div class="v" id="statVram">0.0 GB</div><div class="bar"><div class="bar-fill" id="barVram"></div></div></div>
-        <div class="stat-card"><div class="k">Cost / hour</div><div class="v" id="statCost">$0.00</div><div class="bar"><div class="bar-fill" id="barCost"></div></div></div>
-        <div class="stat-card"><div class="k">Est. carbon / hour</div><div class="v" id="statCo2">0 g CO₂</div><div class="bar"><div class="bar-fill" id="barCo2"></div></div></div>
+        <div class="stat-card"><div class="k">VRAM used</div><div class="v" id="statVram">14.0 GB</div><div class="bar"><div class="bar-fill" id="barVram"></div></div></div>
+        <div class="stat-card"><div class="k">Cost / hour</div><div class="v" id="statCost">$3.67</div><div class="bar"><div class="bar-fill" id="barCost"></div></div></div>
+        <div class="stat-card"><div class="k">Est. carbon / hour</div><div class="v" id="statCo2">126 g CO₂</div><div class="bar"><div class="bar-fill" id="barCo2"></div></div></div>
       </div>
       <div class="demo-foot">
-        <span>Recommended instance: <span class="gpu" id="gpuRec">Hardware Standby</span></span>
-        <span id="qualityNote">No active badge session</span>
+        <span>Recommended instance: <span class="gpu" id="gpuRec">NVIDIA A100 (80GB)</span></span>
+        <span id="qualityNote">Output quality: unverified — this is the baseline</span>
       </div>
     </div>
   </div>
@@ -595,6 +644,71 @@ footer{border-top:1px solid var(--border-soft); padding:44px 0;}
         "Cost" blends two things: lower electricity draw at lower precision, and the ability to move onto a cheaper GPU tier once VRAM demand drops. Accuracy retention varies by model and task — EcoScale runs a verification pass before recommending any switch, rather than assuming compression is free.
       </div>
     </div>
+
+  </div>
+</section>
+
+<!-- ============================= RFID / NFC ASSET INVENTORY ============================= -->
+<section class="section" id="rfid">
+  <div class="wrap">
+    <div class="section-head reveal">
+      <span class="eyebrow">physical chip inventory · RFID / NFC</span>
+      <h2 class="h2">Every GPU gets a tag. Every tag tells the truth.</h2>
+      <p class="lede">When silicon is scarce, the chips you already own matter more than the ones you can't buy. Every physical accelerator carries an RFID/NFC tag — scanning it is what actually checks that hardware into the pool EcoScale can schedule against. No tag, no trust, no assignment.</p>
+    </div>
+
+    <div class="rfid-panel bracket reveal">
+      <div class="rfid-top">
+        <span class="demo-label"><span class="live-dot" style="background:var(--green); animation:none;"></span>RFID SIMULATOR · tap a tag to onboard hardware</span>
+        <button class="btn btn-primary" id="scanBtn" type="button">Simulate tap →</button>
+      </div>
+      <div class="rfid-body">
+        <div class="tag-visual">
+          <div class="wave-ring" id="waveRing"></div>
+          <div class="tag-card" id="tagCard">
+            <span class="tag-chip"></span>
+            <span class="tag-id" id="tagIdLabel">TAG · —</span>
+          </div>
+        </div>
+        <div class="asset-list-wrap">
+          <div class="asset-list-head">
+            <span>Registered fleet</span>
+            <span id="chipsAvoided">0 chips avoided from new purchase</span>
+          </div>
+          <ul class="asset-list" id="assetList">
+            <li class="asset-empty" id="assetEmpty">No hardware checked in yet — tap the reader above to onboard your first GPU.</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============================= LIVE STATE ============================= -->
+<section class="section" id="livestate" style="padding-top:0;">
+  <div class="wrap">
+    <div class="section-head reveal">
+      <span class="eyebrow">live state · on demand</span>
+      <h2 class="h2">Your state. Right now. Provably true.</h2>
+      <p class="lede">This panel never shows a cached guess. Every field is re-read from the GPU currently backing your workload the moment you ask — tied back to the RFID scan that proved that hardware is really the one running it.</p>
+    </div>
+
+    <div class="livestate-panel bracket reveal">
+      <div class="livestate-top">
+        <span class="demo-label"><span class="live-dot"></span>SIGNED IN AS <b>dev_harsheez</b></span>
+        <div class="livestate-select-wrap">
+          <select id="assetSelect" class="asset-select"><option value="">— select verified GPU —</option></select>
+          <button class="btn btn-ghost" id="refreshBtn" type="button">refresh now</button>
+        </div>
+      </div>
+      <div class="livestate-grid" id="livestateGrid">
+        <div class="ls-empty" id="lsEmpty">No verified GPU selected yet. Scan a tag above, then pick it here to see your live, true state.</div>
+      </div>
+      <div class="livestate-foot" id="livestateFoot" style="display:none;">
+        <span class="verified-badge" id="verifiedBadge">✓ verified via RFID scan <b id="verifiedTag">—</b></span>
+        <span id="verifiedTime">last verified just now</span>
+      </div>
+    </div>
   </div>
 </section>
 
@@ -651,6 +765,7 @@ footer{border-top:1px solid var(--border-soft); padding:44px 0;}
                 <div class="plan-cta"><a href="#top" class="btn btn-ghost btn-block">Install SDK</a></div>
               </th>
               <th class="featured">
+                
                 <span class="plan-tier">Team</span>
                 <div class="plan-name">Pro</div>
                 <div class="plan-amount">$499 <span class="per">/ mo</span></div>
@@ -721,7 +836,7 @@ const io = new IntersectionObserver((entries)=>{
 }, {threshold:.12});
 document.querySelectorAll('.reveal').forEach(el=>io.observe(el));
 
-// copy pip install
+// copy pip install (with fallback for non-secure contexts / older browsers)
 const copyBtn = document.getElementById('copyBtn');
 function flashCopied(){
   copyBtn.textContent = 'copied!';
@@ -741,11 +856,11 @@ function legacyCopy(text){
   const ta = document.createElement('textarea');
   ta.value = text; ta.style.position = 'fixed'; ta.style.opacity = '0';
   document.body.appendChild(ta); ta.select();
-  try{ document.execCommand('copy'); flashCopied(); }catch(err){}
+  try{ document.execCommand('copy'); flashCopied(); }catch(err){ /* clipboard unavailable, fail silently */ }
   document.body.removeChild(ta);
 }
 
-// scroll gauge & active nav links
+// scroll gauge + active nav link, batched into one rAF-throttled scroll handler
 const scrollGauge = document.getElementById('scrollGauge');
 const sections = document.querySelectorAll('section[id]');
 const navAnchors = document.querySelectorAll('.navlinks a[href^="#"]');
@@ -772,10 +887,7 @@ window.addEventListener('scroll', ()=>{
 }, {passive:true});
 updateOnScroll();
 
-// smooth anchor scroll
-const mobilePanel = document.getElementById('mobilePanel');
-const mobileToggle = document.getElementById('mobileToggle');
-
+// smooth anchor scroll + close mobile panel
 document.querySelectorAll('a[href^="#"]').forEach(a=>{
   a.addEventListener('click', function(e){
     const id = this.getAttribute('href');
@@ -793,13 +905,15 @@ document.querySelectorAll('a[href^="#"]').forEach(a=>{
 });
 
 // mobile nav toggle
+const mobileToggle = document.getElementById('mobileToggle');
+const mobilePanel = document.getElementById('mobilePanel');
 mobileToggle.addEventListener('click', ()=>{
   const open = mobilePanel.classList.toggle('open');
   mobileToggle.classList.toggle('open', open);
   mobileToggle.setAttribute('aria-expanded', open);
 });
 
-// mouse-tracking glow
+// mouse-tracking glow on cards — rAF-throttled so rapid mousemove doesn't spam style writes
 document.querySelectorAll('.glow-card').forEach(card=>{
   let queuedEvent = null, glowTicking = false;
   card.addEventListener('mousemove', (e)=>{
@@ -816,7 +930,7 @@ document.querySelectorAll('.glow-card').forEach(card=>{
   });
 });
 
-// bit grids
+// build bit-depth grids
 function buildGrid(id, onCount, total=16){
   const el = document.getElementById(id);
   let html = '';
@@ -827,7 +941,7 @@ buildGrid('gridFp16', 16);
 buildGrid('gridInt8', 8);
 buildGrid('gridInt4', 4);
 
-// ticker
+// ticker content
 const TICKER = [
   {m:'Llama-3-8B', vram:'3.5 GB', cost:'$0.52/hr', co2:'46g CO₂/hr'},
   {m:'Mistral-7B', vram:'3.8 GB', cost:'$0.57/hr', co2:'50g CO₂/hr'},
@@ -840,25 +954,14 @@ function tickerHTML(){
 }
 document.getElementById('tickerTrack').innerHTML = tickerHTML() + tickerHTML();
 
-// RFID & Dashboard logic
-const USERS = {
-  'TAG-A1001': { name: 'Angel Kansal', team: 'ML Engineering', precision: 'INT4 Eco' },
-  'TAG-H2002': { name: 'Harshmeet Kaur', team: 'Design & UI', precision: 'FP16 Baseline' }
-};
-
+// interactive eco-mode demo
 const DATA = {
-  'TAG-H2002': { vram:14.0, cost:3.67, co2:126, gpu:'NVIDIA A100 (80GB)', quality:'FP16 Standard Workload', barVram:100, barCost:100, barCo2:100 },
-  'TAG-A1001': { vram:3.5,  cost:0.52, co2:46,  gpu:'NVIDIA T4 (16GB)',   quality:'INT4 Eco-Scale Optimized', barVram:25, barCost:14, barCo2:37 },
-  'IDLE':      { vram:0.0,  cost:0.00, co2:0,   gpu:'Hardware Standby',  quality:'No active badge session', barVram:0, barCost:0, barCo2:0 }
+  off: { vram:14.0, cost:3.67, co2:126, gpu:'NVIDIA A100 (80GB)', quality:'Output quality: unverified — this is the baseline', barVram:100, barCost:100, barCo2:100 },
+  on:  { vram:3.5,  cost:0.52, co2:46,  gpu:'NVIDIA T4 (16GB)',   quality:'Output quality: verified ≥98% retained on this task', barVram:25, barCost:14, barCo2:37 }
 };
-
-let currentTag = null;
-const reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
-
-const rfidSelect = document.getElementById('rfidTagSelect');
-const actionBtn = document.getElementById('rfidActionBtn');
-const activeUser = document.getElementById('activeUser');
-const activeTeam = document.getElementById('activeTeam');
+const sw = document.getElementById('ecoSwitch');
+const lblOff = document.getElementById('lblOff');
+const lblOn = document.getElementById('lblOn');
 const statVram = document.getElementById('statVram');
 const statCost = document.getElementById('statCost');
 const statCo2 = document.getElementById('statCo2');
@@ -867,6 +970,9 @@ const barCost = document.getElementById('barCost');
 const barCo2 = document.getElementById('barCo2');
 const gpuRec = document.getElementById('gpuRec');
 const qualityNote = document.getElementById('qualityNote');
+
+let isOn = false;
+const reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
 
 function animateValue(el, start, end, prefix, suffix, decimals, duration){
   if(reduceMotion){ el.textContent = prefix + end.toFixed(decimals) + suffix; return; }
@@ -881,54 +987,190 @@ function animateValue(el, start, end, prefix, suffix, decimals, duration){
   requestAnimationFrame(tick);
 }
 
-function updateDashboard(tagId, prevTag) {
-  const isBadgedIn = tagId !== 'IDLE';
-  const userData = USERS[tagId];
-  const fromMetrics = DATA[prevTag || 'IDLE'];
-  const toMetrics = DATA[tagId] || DATA['IDLE'];
+function setState(on){
+  isOn = on;
+  const from = on ? DATA.off : DATA.on;
+  const to = on ? DATA.on : DATA.off;
 
-  // Lock dropdown while badged in
-  rfidSelect.disabled = isBadgedIn;
+  sw.classList.toggle('on', on);
+  sw.setAttribute('aria-checked', on);
+  lblOff.classList.toggle('active', !on);
+  lblOn.classList.toggle('active', on);
 
-  activeUser.textContent = isBadgedIn ? `${userData.name} (${userData.precision})` : 'None (Standby)';
-  activeTeam.textContent = isBadgedIn ? userData.team : 'Unassigned';
-  activeUser.className = isBadgedIn ? 'badge-active' : '';
+  animateValue(statVram, from.vram, to.vram, '', ' GB', 1, 550);
+  animateValue(statCost, from.cost, to.cost, '$', '', 2, 550);
+  animateValue(statCo2, from.co2, to.co2, '', ' g CO₂', 0, 550);
 
-  animateValue(statVram, fromMetrics.vram, toMetrics.vram, '', ' GB', 1, 550);
-  animateValue(statCost, fromMetrics.cost, toMetrics.cost, '$', '', 2, 550);
-  animateValue(statCo2, fromMetrics.co2, toMetrics.co2, '', ' g CO₂', 0, 550);
+  barVram.style.width = to.barVram + '%';
+  barCost.style.width = to.barCost + '%';
+  barCo2.style.width = to.barCo2 + '%';
+  [barVram, barCost, barCo2].forEach(b => b.classList.toggle('good', on));
+  [statVram, statCost, statCo2].forEach(s => s.classList.toggle('good', on));
 
-  barVram.style.width = toMetrics.barVram + '%';
-  barCost.style.width = toMetrics.barCost + '%';
-  barCo2.style.width = toMetrics.barCo2 + '%';
+  gpuRec.textContent = to.gpu;
+  gpuRec.classList.toggle('good', on);
+  qualityNote.textContent = to.quality;
+}
+if(sw){ sw.addEventListener('click', ()=> setState(!isOn)); }
+setState(false);
 
-  const isEco = tagId === 'TAG-A1001';
-  [barVram, barCost, barCo2].forEach(b => b.classList.toggle('good', isEco));
-  [statVram, statCost, statCo2].forEach(s => s.classList.toggle('good', isEco));
+/* ============================= RFID / NFC SIMULATOR ============================= */
+const GPU_POOL = [
+  {gpu:'NVIDIA T4 (16GB)',  vram:3.5, cost:0.52, co2:46,  quant:'INT4'},
+  {gpu:'NVIDIA L4 (24GB)',  vram:6.1, cost:0.79, co2:63,  quant:'INT8'},
+  {gpu:'NVIDIA A10 (24GB)', vram:7.0, cost:0.95, co2:71,  quant:'INT8'},
+  {gpu:'NVIDIA V100 (32GB)',vram:8.4, cost:1.21, co2:88,  quant:'FP16'},
+  {gpu:'NVIDIA A100 (40GB)',vram:14.0,cost:3.67, co2:126, quant:'FP16'},
+];
 
-  gpuRec.textContent = toMetrics.gpu;
-  gpuRec.classList.toggle('good', isEco);
-  qualityNote.textContent = toMetrics.quality;
+let assets = [];
+let assetSeq = 0;
+let tickHandle = null;
+let lastVerifiedAt = null;
+
+const scanBtn = document.getElementById('scanBtn');
+const waveRing = document.getElementById('waveRing');
+const tagCard = document.getElementById('tagCard');
+const tagIdLabel = document.getElementById('tagIdLabel');
+const assetList = document.getElementById('assetList');
+const assetEmpty = document.getElementById('assetEmpty');
+const chipsAvoided = document.getElementById('chipsAvoided');
+const assetSelect = document.getElementById('assetSelect');
+const livestateGrid = document.getElementById('livestateGrid');
+const livestateFoot = document.getElementById('livestateFoot');
+const verifiedTag = document.getElementById('verifiedTag');
+const verifiedTime = document.getElementById('verifiedTime');
+const refreshBtn = document.getElementById('refreshBtn');
+
+function randomTagId(){
+  const hex = () => Math.floor(Math.random()*256).toString(16).toUpperCase().padStart(2,'0');
+  return `${hex()}:${hex()}:${hex()}:${hex()}`;
 }
 
-actionBtn.addEventListener('click', () => {
-  const prev = currentTag || 'IDLE';
-  if (currentTag) {
-    currentTag = null;
-    actionBtn.textContent = 'Badge In';
-    actionBtn.classList.remove('btn-ghost');
-    actionBtn.classList.add('btn-primary');
-    updateDashboard('IDLE', prev);
-  } else {
-    currentTag = rfidSelect.value;
-    actionBtn.textContent = 'Badge Out';
-    actionBtn.classList.remove('btn-primary');
-    actionBtn.classList.add('btn-ghost');
-    updateDashboard(currentTag, prev);
+function renderAssetList(){
+  if(assets.length === 0){
+    assetList.innerHTML = '';
+    assetList.appendChild(assetEmpty);
+    return;
   }
-});
+  assetList.innerHTML = assets.map(a => `
+    <li class="asset-item" data-id="${a.id}">
+      <span class="asset-dot"></span>
+      <div class="asset-main">
+        <div class="gpu">${a.gpu}</div>
+        <div class="tag">tag ${a.tagId} · checked in ${a.checkedIn}</div>
+      </div>
+      <div class="asset-meta">
+        <span><b>${a.quant}</b></span>
+        <span>${a.vram.toFixed(1)} GB</span>
+        <span>$${a.cost.toFixed(2)}/hr</span>
+      </div>
+      <button class="asset-checkout" data-checkout="${a.id}" type="button">check out</button>
+    </li>
+  `).join('');
+}
 
-updateDashboard('IDLE', 'IDLE');
+function renderAssetSelect(){
+  const current = assetSelect.value;
+  assetSelect.innerHTML = '<option value="">— select verified GPU —</option>' +
+    assets.map(a => `<option value="${a.id}">${a.gpu} · tag ${a.tagId}</option>`).join('');
+  if(assets.some(a => String(a.id) === current)){
+    assetSelect.value = current;
+  } else {
+    clearLiveState();
+  }
+}
+
+function updateChipsAvoided(){
+  chipsAvoided.textContent = `${assets.length} chip${assets.length===1?'':'s'} avoided from new purchase`;
+}
+
+function clearLiveState(){
+  assetSelect.value = '';
+  livestateGrid.innerHTML = '<div class="ls-empty" id="lsEmpty">No verified GPU selected yet. Scan a tag above, then pick it here to see your live, true state.</div>';
+  livestateFoot.style.display = 'none';
+  if(tickHandle){ clearInterval(tickHandle); tickHandle = null; }
+}
+
+function renderLiveState(asset){
+  livestateGrid.innerHTML = `
+    <div class="stat-card"><div class="k">Active GPU</div><div class="v" style="font-size:15px;">${asset.gpu}</div></div>
+    <div class="stat-card"><div class="k">Quant mode</div><div class="v good">${asset.quant}</div></div>
+    <div class="stat-card"><div class="k">VRAM used</div><div class="v">${asset.vram.toFixed(1)} GB</div></div>
+    <div class="stat-card"><div class="k">Cost / hour</div><div class="v">$${asset.cost.toFixed(2)}</div></div>
+  `;
+  livestateFoot.style.display = 'flex';
+  verifiedTag.textContent = asset.tagId;
+  lastVerifiedAt = Date.now();
+  updateVerifiedTime();
+  if(tickHandle) clearInterval(tickHandle);
+  tickHandle = setInterval(updateVerifiedTime, 1000);
+}
+
+function updateVerifiedTime(){
+  if(!lastVerifiedAt) return;
+  const secs = Math.max(0, Math.round((Date.now() - lastVerifiedAt)/1000));
+  verifiedTime.textContent = secs < 2 ? 'last verified just now' : `last verified ${secs}s ago`;
+}
+
+if(scanBtn){
+  scanBtn.addEventListener('click', ()=>{
+    const pick = GPU_POOL[Math.floor(Math.random()*GPU_POOL.length)];
+    const tagId = randomTagId();
+    assetSeq += 1;
+    const asset = { id: assetSeq, tagId, checkedIn: 'just now', ...pick };
+    assets.push(asset);
+
+    tagIdLabel.textContent = `TAG · ${tagId}`;
+    tagCard.classList.add('pulse');
+    waveRing.classList.remove('animate'); void waveRing.offsetWidth; waveRing.classList.add('animate');
+    setTimeout(()=> tagCard.classList.remove('pulse'), 350);
+
+    renderAssetList();
+    renderAssetSelect();
+    updateChipsAvoided();
+  });
+}
+
+if(assetList){
+  assetList.addEventListener('click', (e)=>{
+    const btn = e.target.closest('[data-checkout]');
+    if(!btn) return;
+    const id = Number(btn.getAttribute('data-checkout'));
+    assets = assets.filter(a => a.id !== id);
+    renderAssetList();
+    renderAssetSelect();
+    updateChipsAvoided();
+  });
+}
+
+if(assetSelect){
+  assetSelect.addEventListener('change', ()=>{
+    const id = Number(assetSelect.value);
+    const asset = assets.find(a => a.id === id);
+    if(asset){ renderLiveState(asset); } else { clearLiveState(); }
+  });
+}
+
+if(refreshBtn){
+  refreshBtn.addEventListener('click', ()=>{
+    const id = Number(assetSelect.value);
+    const asset = assets.find(a => a.id === id);
+    if(!asset) return;
+    refreshBtn.textContent = 'verifying…';
+    refreshBtn.classList.add('refresh-btn-spin');
+    setTimeout(()=>{
+      // re-read "live" telemetry with tiny natural jitter, still true to the asset's real profile
+      asset.vram = +(asset.vram + (Math.random()-0.5)*0.1).toFixed(1);
+      asset.cost = +(asset.cost + (Math.random()-0.5)*0.02).toFixed(2);
+      renderLiveState(asset);
+      refreshBtn.textContent = 'refresh now';
+      refreshBtn.classList.remove('refresh-btn-spin');
+    }, 500);
+  });
+}
+
+updateChipsAvoided();
 </script>
 </body>
 </html>
