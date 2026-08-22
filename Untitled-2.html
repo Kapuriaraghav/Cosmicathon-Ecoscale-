@@ -8,18 +8,11 @@
     <style>
         @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap');
         body { font-family: 'Inter', sans-serif; }
-        #authGate { display:flex; align-items:center; justify-content:center; min-height:100vh; }
     </style>
-    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js"></script>
 </head>
 <body class="bg-slate-950 text-slate-100 min-h-screen p-6 md:p-10">
 
-    <!-- Shown while we verify the session; swapped out once auth check completes -->
-    <div id="authGate">
-        <p class="text-slate-400 text-sm">Checking session...</p>
-    </div>
-
-    <div id="dashboardRoot" class="max-w-7xl mx-auto space-y-8" style="display:none;">
+    <div class="max-w-7xl mx-auto space-y-8">
         
         <!-- Header -->
         <header class="flex flex-col md:flex-row md:items-center justify-between border-b border-slate-800 pb-6 gap-4">
@@ -31,17 +24,9 @@
                 </div>
                 <p class="text-sm text-slate-400 mt-1">Model: <span id="modelId" class="text-slate-200 font-mono">Loading...</span></p>
             </div>
-            <div class="flex items-center gap-4">
-                <div class="text-left md:text-right text-xs text-slate-500">
-                    <p>Telemetry Engine: <span class="text-emerald-400 uppercase font-bold">live</span></p>
-                    <p class="mt-0.5">Last Sync: <span id="lastSync">Loading...</span></p>
-                </div>
-                <div class="flex items-center gap-3 border-l border-slate-800 pl-4">
-                    <span id="userEmail" class="text-xs text-slate-400 hidden md:inline"></span>
-                    <button id="logoutBtn" class="bg-slate-800 hover:bg-rose-500/20 hover:text-rose-400 text-slate-300 text-xs font-semibold px-3.5 py-2 rounded-lg border border-slate-700 hover:border-rose-500/30 transition-all">
-                        Sign Out
-                    </button>
-                </div>
+            <div class="text-left md:text-right text-xs text-slate-500">
+                <p>Telemetry Engine: <span class="text-emerald-400 uppercase font-bold">live</span></p>
+                <p class="mt-0.5">Last Sync: <span id="lastSync">Loading...</span></p>
             </div>
         </header>
 
@@ -210,7 +195,7 @@
             </div>
         </div>
 
-    </div><!-- /#dashboardRoot -->
+    </div>
 
     <!-- LIVE TELEMETRY FETCH ENGINE -->
     <script>
@@ -276,49 +261,6 @@
 
         // Auto-refresh telemetry every 3 seconds
         setInterval(fetchTelemetryData, 3000);
-    </script>
-
-    <!-- AUTH GUARD + SIGN OUT -->
-    <script>
-        const SUPABASE_URL = 'https://uuqhhyfjfxlipxcpklpu.supabase.co';
-        const SUPABASE_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InV1cWhoeWZqZnhsaXB4Y3BrbHB1Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODczOTk4OTQsImV4cCI6MjEwMjk3NTg5NH0.3i0uHut0Ss9lRiGxFaN6MTNMgIluVDCeM5H68fJ93P8';
-        const supabaseClient = supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
-
-        const authGate = document.getElementById('authGate');
-        const dashboardRoot = document.getElementById('dashboardRoot');
-        const userEmailEl = document.getElementById('userEmail');
-        const logoutBtn = document.getElementById('logoutBtn');
-
-        async function guardDashboard() {
-            const { data, error } = await supabaseClient.auth.getSession();
-
-            if (error || !data.session) {
-                // No valid session -> kick back to login
-                window.location.href = 'login.html';
-                return;
-            }
-
-            // Logged in: reveal dashboard, show user's email
-            userEmailEl.textContent = data.session.user.email || '';
-            authGate.style.display = 'none';
-            dashboardRoot.style.display = '';
-        }
-
-        // Keep dashboard access in sync if the session changes in another tab
-        supabaseClient.auth.onAuthStateChange((event, session) => {
-            if (event === 'SIGNED_OUT' || !session) {
-                window.location.href = 'login.html';
-            }
-        });
-
-        logoutBtn.addEventListener('click', async () => {
-            logoutBtn.disabled = true;
-            logoutBtn.textContent = 'Signing out...';
-            await supabaseClient.auth.signOut();
-            window.location.href = 'login.html';
-        });
-
-        guardDashboard();
     </script>
 </body>
 </html>

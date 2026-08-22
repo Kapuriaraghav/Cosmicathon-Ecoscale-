@@ -1,0 +1,81 @@
+{
+  "generated_at": "2026-08-22T16:17:58",
+  "model_id": "TinyLlama/TinyLlama-1.1B-Chat-v1.0",
+  "telemetry": {
+    "telemetry_source": "live",
+    "vram_used_gb": 1.36,
+    "vram_total_gb": 15.0,
+    "vram_percent": 9.1,
+    "power_draw_watts": 28.7,
+    "hourly_cost_usd": 0.52,
+    "carbon_gco2_hr": 13.6
+  },
+  "recommendation": {
+    "current_vram_gb": 1.36,
+    "recommended_precision": "int4",
+    "recommended_gpu": "NVIDIA T4",
+    "reference_hourly_cost_usd": 0.52,
+    "estimated_savings_percent_vs_fp16_a100": 85.8,
+    "reason": "VRAM footprint fits within INT4 (Extreme Eco) tier (NVIDIA T4)."
+  },
+  "benchmark_before_vs_after": {
+    "without_ecoscale": {
+      "precision": "FP16 (Standard Baseline)",
+      "vram_used_gb": 14.0,
+      "virtual_gpus_saved": 0.0,
+      "hourly_cost_usd": 3.67,
+      "gpu_tier": "NVIDIA A100",
+      "status": "Wasting 75% memory footprint"
+    },
+    "with_ecoscale": {
+      "precision": "INT4 (Extreme Eco)",
+      "vram_used_gb": 3.5,
+      "virtual_gpus_saved": 0.75,
+      "hourly_cost_usd": 0.52,
+      "gpu_tier": "NVIDIA T4",
+      "status": "Rightsized & Optimized"
+    },
+    "impact_delta": {
+      "vram_freed_gb": 10.5,
+      "virtual_gpus_unlocked": 0.75,
+      "cost_reduction_percent": 85.8,
+      "summary": "Without EcoScale, you waste 10.5 GB VRAM per stream. With EcoScale, you unlock 0.75 Virtual GPUs."
+    }
+  },
+  "total_virtual_gpus_saved": 0.9,
+  "active_session": null,
+  "usage_log": [
+    {
+      "tag_id": "TAG-A1001",
+      "user": "Angel Kansal",
+      "team": "ML Engineering",
+      "precision": "int4",
+      "start_timestamp": "2026-08-22T16:17:34",
+      "end_timestamp": "2026-08-22T16:17:58",
+      "elapsed_hours": 0.0006,
+      "cost_usd": 0.0003,
+      "carbon_gco2": 0.01,
+      "virtual_gpus_saved": 0.9
+    }
+  ],
+  "team_report": {
+    "by_team": {
+      "ML Engineering": {
+        "hours": 0.0006,
+        "cost_usd": 0.0003,
+        "carbon_gco2": 0.01,
+        "virtual_gpus_saved": 0.9,
+        "sessions": 1
+      }
+    },
+    "by_user": {
+      "Angel Kansal": {
+        "hours": 0.0006,
+        "cost_usd": 0.0003,
+        "carbon_gco2": 0.01,
+        "virtual_gpus_saved": 0.9,
+        "sessions": 1
+      }
+    }
+  }
+}

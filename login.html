@@ -90,9 +90,18 @@ input:focus{outline:2px solid var(--green); outline-offset:1px; border-color:tra
     const errorMsg = document.getElementById('errorMsg');
     const loginBtn = document.getElementById('loginBtn');
 
-    // If already logged in, skip straight to dashboard
+    // Only redirect if already logged in (check once on page load)
+    let redirectChecked = false;
     supabaseClient.auth.getSession().then(({ data }) => {
-      if (data.session) window.location.href = 'dashboard.html';
+      if (data.session && !redirectChecked) {
+        redirectChecked = true;
+        // Add small delay to ensure session is valid
+        setTimeout(() => {
+          window.location.href = 'dashboard.html';
+        }, 100);
+      }
+    }).catch(err => {
+      console.error('Session check error:', err);
     });
 
     form.addEventListener('submit', async (e) => {
@@ -114,7 +123,10 @@ input:focus{outline:2px solid var(--green); outline-offset:1px; border-color:tra
         return;
       }
 
-      window.location.href = 'dashboard.html';
+      // Success - redirect after small delay
+      setTimeout(() => {
+        window.location.href = 'dashboard.html';
+      }, 500);
     });
   </script>
 </body>

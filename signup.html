@@ -114,9 +114,17 @@ input:focus{outline:2px solid var(--green); outline-offset:1px; border-color:tra
     const successMsg = document.getElementById('successMsg');
     const signupBtn = document.getElementById('signupBtn');
 
-    // If already logged in, skip straight to dashboard
+    // Only redirect if already logged in (check once on page load)
+    let redirectChecked = false;
     supabaseClient.auth.getSession().then(({ data }) => {
-      if (data.session) window.location.href = 'dashboard.html';
+      if (data.session && !redirectChecked) {
+        redirectChecked = true;
+        setTimeout(() => {
+          window.location.href = 'dashboard.html';
+        }, 100);
+      }
+    }).catch(err => {
+      console.error('Session check error:', err);
     });
 
     form.addEventListener('submit', async (e) => {
@@ -147,7 +155,9 @@ input:focus{outline:2px solid var(--green); outline-offset:1px; border-color:tra
 
       // If email confirmation is OFF in Supabase settings, session exists immediately
       if (data.session) {
-        window.location.href = 'dashboard.html';
+        setTimeout(() => {
+          window.location.href = 'dashboard.html';
+        }, 500);
       } else {
         successMsg.textContent = 'Account created! Check your email to confirm, then log in.';
         successMsg.classList.add('show');
