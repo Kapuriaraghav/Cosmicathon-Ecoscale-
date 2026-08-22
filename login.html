@@ -51,6 +51,12 @@ input:focus{outline:2px solid var(--green); outline-offset:1px; border-color:tra
 .foot a{color:var(--green); font-weight:600;}
 .back{display:block; text-align:center; margin-top:18px; font-size:12.5px; color:var(--text-faint);}
 .back:hover{color:var(--text-dim);}
+.error-msg{
+  display:none; background:#3a1414; border:1px solid #5a2020; color:#f0574f;
+  font-size:13px; padding:10px 14px; border-radius:10px; margin-bottom:16px;
+}
+.error-msg.show{display:block;}
+.btn:disabled{opacity:.6; cursor:not-allowed; transform:none;}
 </style>
 </head>
 <body>
@@ -58,7 +64,8 @@ input:focus{outline:2px solid var(--green); outline-offset:1px; border-color:tra
     <a href="index.html" class="logo"><span class="leaf">Eco</span>Scale<span class="ai">AI</span></a>
     <h1>Welcome back</h1>
     <p class="sub">Log in to your EcoScale dashboard.</p>
-    <form onsubmit="event.preventDefault(); alert('This is a demo page — hook this up to your auth backend.');">
+    <div class="error-msg" id="errorMsg"></div>
+    <form id="loginForm">
       <div class="field">
         <label for="email">Email</label>
         <input id="email" type="email" placeholder="you@company.com" required>
@@ -67,10 +74,48 @@ input:focus{outline:2px solid var(--green); outline-offset:1px; border-color:tra
         <label for="password">Password</label>
         <input id="password" type="password" placeholder="••••••••" required>
       </div>
-      <button type="submit" class="btn">Log in</button>
+      <button type="submit" class="btn" id="loginBtn">Log in</button>
     </form>
     <p class="foot">Don't have an account? <a href="signup.html">Sign up</a></p>
     <a href="index.html" class="back">← Back to home</a>
   </div>
+
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js"></script>
+  <script>
+    const SUPABASE_URL = 'https://uuqhhyfjfxlipxcpklpu.supabase.co';
+    const SUPABASE_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InV1cWhoeWZqZnhsaXB4Y3BrbHB1Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODczOTk4OTQsImV4cCI6MjEwMjk3NTg5NH0.3i0uHut0Ss9lRiGxFaN6MTNMgIluVDCeM5H68fJ93P8';
+    const supabaseClient = supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
+
+    const form = document.getElementById('loginForm');
+    const errorMsg = document.getElementById('errorMsg');
+    const loginBtn = document.getElementById('loginBtn');
+
+    // If already logged in, skip straight to dashboard
+    supabaseClient.auth.getSession().then(({ data }) => {
+      if (data.session) window.location.href = 'dashboard.html';
+    });
+
+    form.addEventListener('submit', async (e) => {
+      e.preventDefault();
+      errorMsg.classList.remove('show');
+      loginBtn.disabled = true;
+      loginBtn.textContent = 'Logging in...';
+
+      const email = document.getElementById('email').value;
+      const password = document.getElementById('password').value;
+
+      const { error } = await supabaseClient.auth.signInWithPassword({ email, password });
+
+      if (error) {
+        errorMsg.textContent = error.message;
+        errorMsg.classList.add('show');
+        loginBtn.disabled = false;
+        loginBtn.textContent = 'Log in';
+        return;
+      }
+
+      window.location.href = 'dashboard.html';
+    });
+  </script>
 </body>
 </html>
