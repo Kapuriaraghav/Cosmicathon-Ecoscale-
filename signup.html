@@ -57,6 +57,17 @@ input:focus{outline:2px solid var(--green); outline-offset:1px; border-color:tra
   margin-top:22px; font-family:var(--mono); font-size:12px; color:var(--green); background:#0a1712;
   border:1px solid var(--green-soft); padding:9px 14px; border-radius:999px; text-align:center;
 }
+.error-msg{
+  display:none; background:#3a1414; border:1px solid #5a2020; color:#f0574f;
+  font-size:13px; padding:10px 14px; border-radius:10px; margin-bottom:16px;
+}
+.error-msg.show{display:block;}
+.success-msg{
+  display:none; background:#0e2a1f; border:1px solid var(--green-soft); color:var(--green);
+  font-size:13px; padding:10px 14px; border-radius:10px; margin-bottom:16px;
+}
+.success-msg.show{display:block;}
+.btn:disabled{opacity:.6; cursor:not-allowed; transform:none;}
 </style>
 </head>
 <body>
@@ -64,7 +75,9 @@ input:focus{outline:2px solid var(--green); outline-offset:1px; border-color:tra
     <a href="index.html" class="logo"><span class="leaf">Eco</span>Scale<span class="ai">AI</span></a>
     <h1>Create your account</h1>
     <p class="sub">Free forever on the Developer tier — upgrade anytime.</p>
-    <form onsubmit="event.preventDefault(); alert('This is a demo page — hook this up to your auth backend.');">
+    <div class="error-msg" id="errorMsg"></div>
+    <div class="success-msg" id="successMsg"></div>
+    <form id="signupForm">
       <div class="row">
         <div class="field">
           <label for="name">Name</label>
@@ -81,13 +94,67 @@ input:focus{outline:2px solid var(--green); outline-offset:1px; border-color:tra
       </div>
       <div class="field">
         <label for="password">Password</label>
-        <input id="password" type="password" placeholder="••••••••" required>
+        <input id="password" type="password" placeholder="•••••••• (min 6 chars)" required minlength="6">
       </div>
-      <button type="submit" class="btn">Create account</button>
+      <button type="submit" class="btn" id="signupBtn">Create account</button>
     </form>
     <p class="pip">$ pip install ecoscale — no signup required to try it locally</p>
     <p class="foot">Already have an account? <a href="login.html">Log in</a></p>
     <a href="index.html" class="back">← Back to home</a>
   </div>
+
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js"></script>
+  <script>
+    const SUPABASE_URL = 'https://uuqhhyfjfxlipxcpklpu.supabase.co';
+    const SUPABASE_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InV1cWhoeWZqZnhsaXB4Y3BrbHB1Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODczOTk4OTQsImV4cCI6MjEwMjk3NTg5NH0.3i0uHut0Ss9lRiGxFaN6MTNMgIluVDCeM5H68fJ93P8';
+    const supabaseClient = supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
+
+    const form = document.getElementById('signupForm');
+    const errorMsg = document.getElementById('errorMsg');
+    const successMsg = document.getElementById('successMsg');
+    const signupBtn = document.getElementById('signupBtn');
+
+    // If already logged in, skip straight to dashboard
+    supabaseClient.auth.getSession().then(({ data }) => {
+      if (data.session) window.location.href = 'dashboard.html';
+    });
+
+    form.addEventListener('submit', async (e) => {
+      e.preventDefault();
+      errorMsg.classList.remove('show');
+      successMsg.classList.remove('show');
+      signupBtn.disabled = true;
+      signupBtn.textContent = 'Creating account...';
+
+      const name = document.getElementById('name').value;
+      const company = document.getElementById('company').value;
+      const email = document.getElementById('email').value;
+      const password = document.getElementById('password').value;
+
+      const { data, error } = await supabaseClient.auth.signUp({
+        email,
+        password,
+        options: { data: { full_name: name, company: company } }
+      });
+
+      if (error) {
+        errorMsg.textContent = error.message;
+        errorMsg.classList.add('show');
+        signupBtn.disabled = false;
+        signupBtn.textContent = 'Create account';
+        return;
+      }
+
+      // If email confirmation is OFF in Supabase settings, session exists immediately
+      if (data.session) {
+        window.location.href = 'dashboard.html';
+      } else {
+        successMsg.textContent = 'Account created! Check your email to confirm, then log in.';
+        successMsg.classList.add('show');
+        signupBtn.disabled = false;
+        signupBtn.textContent = 'Create account';
+      }
+    });
+  </script>
 </body>
 </html>
