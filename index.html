@@ -175,15 +175,17 @@ header{
   display:none; max-height:0; overflow:hidden; border-bottom:1px solid var(--border-soft);
   transition:max-height .3s var(--ease);
 }
-.mobile-panel.open{max-height:280px;}
+.mobile-panel.open{max-height:340px;}
 .mobile-panel .wrap{padding:8px 28px 22px; display:flex; flex-direction:column; gap:4px;}
 .mobile-panel a{padding:12px 4px; font-size:15px; color:var(--text-dim); border-bottom:1px solid var(--border-soft);}
 .mobile-panel a:hover{color:var(--text);}
+.mobile-panel .mob-ctas{display:flex; gap:10px; padding-top:14px;}
+.mobile-panel .mob-ctas .btn{flex:1;}
 
 @media (max-width:860px){
   .navlinks{display:none;}
   .navmobile-toggle{display:flex;}
-  .navcta .btn-ghost{display:none;}
+  .navcta{display:none;}
   .mobile-panel{display:block;}
 }
 
@@ -427,7 +429,7 @@ footer{border-top:1px solid var(--border-soft); padding:44px 0;}
       <a href="#pricing">Pricing</a>
     </nav>
     <div class="navcta">
-      <a href="login.html" class="btn btn-ghost">Login</a>
+      <a href="login.html" class="btn btn-ghost">Log in</a>
       <a href="signup.html" class="btn btn-primary">Sign up</a>
     </div>
     <button class="navmobile-toggle" id="mobileToggle" aria-label="Menu" aria-expanded="false"><span></span><span></span><span></span></button>
@@ -438,8 +440,10 @@ footer{border-top:1px solid var(--border-soft); padding:44px 0;}
       <a href="#how">How it works</a>
       <a href="#who">Who it's for</a>
       <a href="#pricing">Pricing</a>
-      <a href="login.html">Login</a>
-      <a href="signup.html">Sign up</a>
+      <div class="mob-ctas">
+        <a href="login.html" class="btn btn-ghost btn-block">Log in</a>
+        <a href="signup.html" class="btn btn-primary btn-block">Sign up</a>
+      </div>
     </div>
   </div>
 </header>
@@ -511,7 +515,11 @@ footer{border-top:1px solid var(--border-soft); padding:44px 0;}
 <section class="section" id="objection">
   <div class="wrap">
     <div class="section-head reveal">
-      <span class="eyebrow" style="font-size:20px; letter-spacing:.1em; gap:12px;">the obvious question</span>
+      <span class="eyebrow">the obvious question</span>
+      <h2 class="h2">Yes, the compression is open-source. Here's the part that isn't.</h2>
+    </div>
+    <div class="objection-lede reveal">
+      <p><strong>bitsandbytes, AWQ, and GPTQ are free</strong>, and we're not pretending otherwise — anyone can download them right now. What's actually hard is everything around them.</p>
     </div>
     <div class="obj-grid stagger reveal">
       <div class="obj-card">
@@ -638,20 +646,20 @@ footer{border-top:1px solid var(--border-soft); padding:44px 0;}
                 <span class="plan-tier">Developer</span>
                 <div class="plan-name">Free</div>
                 <div class="plan-amount">$0 <span class="per">/ forever</span></div>
-                <div class="plan-cta"><a href="#top" class="btn btn-ghost btn-block">Install SDK</a></div>
+                <div class="plan-cta"><a href="signup.html" class="btn btn-ghost btn-block">Install SDK</a></div>
               </th>
               <th class="featured">
                 
                 <span class="plan-tier">Team</span>
                 <div class="plan-name">Pro</div>
                 <div class="plan-amount">$499 <span class="per">/ mo</span></div>
-                <div class="plan-cta"><a href="#" class="btn btn-primary btn-block">Start Team</a></div>
+                <div class="plan-cta"><a href="signup.html" class="btn btn-primary btn-block">Start Team</a></div>
               </th>
               <th>
                 <span class="plan-tier">Future scope</span>
                 <div class="plan-name">Enterprise</div>
                 <div class="plan-amount">$2–5k <span class="per">+ /mo</span></div>
-                <div class="plan-cta"><a href="#" class="btn btn-ghost btn-block">Talk to us</a></div>
+                <div class="plan-cta"><a href="signup.html" class="btn btn-ghost btn-block">Reach Us</a></div>
               </th>
             </tr>
           </thead>
